@@ -5,7 +5,6 @@ const Login = (props) => {
   let navigate = useNavigate();
 
   let location = useLocation();
-  const [progress, setProgress] = useState("");
   const [credentials, setCredentials] = useState({ email: "", password: "" });
 
   const onChange = (e) => {
@@ -14,7 +13,6 @@ const Login = (props) => {
 
   const handleSubmit = async (e) => {
     let host = "http://localhost:3005";
-    setProgress("cursor-progress");
     e.preventDefault();
     const responce = await fetch(`${host}/api/auth/login`, {
       method: "POST",
@@ -34,10 +32,10 @@ const Login = (props) => {
       localStorage.setItem("token", json.authToken);
       navigate("/");
       window.location.reload();
-      props.showAlert("Logged in successfully", "success");
+      // props.showAlert("Logged in successfully", "success");
     } else {
-      setProgress("");
-      props.showAlert("Invalid Credentials", "danger");
+      console.log("can't signin")
+      // props.showAlert("Invalid Credentials", "danger");
     }
   };
 
@@ -111,7 +109,7 @@ const Login = (props) => {
     // </section>
     <section class="bg-white dark:bg-gray-900">
       <div class="container flex items-center justify-center min-h-screen px-6 mx-auto">
-        <form class="w-full max-w-md">
+        <form class="w-full max-w-md" onSubmit={handleSubmit}>
           <div class="flex justify-center mx-auto">
             <img
               class="w-auto h-7 sm:h-8"
@@ -163,8 +161,14 @@ const Login = (props) => {
 
             <input
               type="email"
+              name="email"
+              id="email"
               class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Email address"
+              value={credentials.email}
+              onChange={onChange}
+              minLength={5}
+              required
             />
           </div>
 
@@ -190,6 +194,11 @@ const Login = (props) => {
               type="password"
               class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
               placeholder="Password"
+              name="password"
+              value={credentials.password}
+              onChange={onChange}
+              minLength={8}
+              required
             />
           </div>
 
